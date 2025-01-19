@@ -5,7 +5,7 @@ Generally, we can invoke non-kotest assertions inside kotest tests, and they wor
 <br/>
 For instance, even though `verify` fails in the following example, we'd expect `2*2 shouldBe 5` to evaluate and output failure message, but there is only one failure message in the output:
 
-```kotest
+```kotlin
  assertSoftly {
     verify(exactly = 1) { myService.getAnswer(1, 2) }
     2*2 shouldBe 5
@@ -25,4 +25,4 @@ Likewise, souppose that in the following example `verify` would fail if it were 
    io.kotest.assertions.AssertionFailedError: expected:<5> but was:<4>
 ```
 
-### `verify` fails a test, as expected
+### Before offering a solution, let's figure out why
