@@ -30,6 +30,8 @@ val mockAnsweringService = run {
 
 val myService = MyService(mockAnsweringService)
 ```
+
+Personally,
 Personally, while my previous project was Kotlin and SpringBoot, my current gig is completely framework-free. So I'm wiring up my dependencies myself, and know what? Even though the code is covered with tests really well, I have never felt the need to use mocks - when my dependencies are functions, test-double functions get the job done with less effort.
 <br/>
 <br/>
