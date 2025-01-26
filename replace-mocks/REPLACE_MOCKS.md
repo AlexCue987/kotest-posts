@@ -71,14 +71,14 @@ val myService = MyService(hasAnswer = { 42 })
 // tests to follow
 ```
 
-### Building A Test Doubles To Return A Series Of Canned Values, One at A Time
+### Building A Test Double To Return A Series Of Canned Values, One at A Time
 
 `mockk` has a really convenient feature, having a mocked function return a series of canned values, one at a time, like this:
 ```kotlin
  every { ret.answer(any()) } returns 42 andThen 43
 ```
 
-Let's replicate this really nice feature using extension function `Sequence<T>.toFunction` which is provided by Kotest 6.0:
+Let's replicate this really nice feature using extension function `Sequence<T>.toFunction()` which is provided by Kotest 6.0:
 
 ```kotlin
 val cannedAnswers = sequenceOf(43, 43).toFunction()
@@ -88,3 +88,32 @@ val myService = MyService(hasAnswer = { cannedAnswers.next() })
 // tests to follow
 ```
 
+**Note** our `cannedAnswers` function is not exactly equivalent to `every { ret.answer(any()) } returns 42 andThen 43`. In fact, the mocked function will return 42 once, and the 43 as many times as it's called. On the other hand, `cannedAnswers` will return 42 once, 43 once, and then throw an exception. Should we need it to return 43 as many times as it's called, that's easy too. We have the full power and flexibility of Kotlin to build any sequence we want, like this:
+
+```kotlin
+sequence {
+  yield(42)
+  while(true) {
+    yield(43)
+  }
+}
+```
+
+Should we need our test double to intermittently throw an `Exception`, Kotest 6.0 has another useful extension function to accomplish that, `Sequence<Result<T>>.toFunction()`. The following example shows how it works:
+
+```kotlin
+val cannedValues = sequenceOf(
+  Result.success("yes"),
+  Result.failure(RuntimeException("bad question")),
+  Result.success("no")
+).toFunction()
+cannedValues.next() shouldBe "yes"
+shouldThrow<RuntimeException> { cannedValues.next() }
+cannedValues.next() shouldBe "no"
+```
+
+This implemnentation of `cannedValues` can be plugged in exactly like the previos one:
+
+```kotlin
+val myService = MyService(hasAnswer = { cannedAnswers.next() })
+```
