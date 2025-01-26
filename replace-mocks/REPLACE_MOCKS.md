@@ -88,7 +88,7 @@ val myService = MyService(hasAnswer = { cannedAnswers.next() })
 // tests to follow
 ```
 
-**Note** our `cannedAnswers` function is not exactly equivalent to `every { ret.answer(any()) } returns 42 andThen 43`. In fact, the mocked function will return 42 once, and the 43 as many times as it's called. On the other hand, `cannedAnswers` will return 42 once, 43 once, and then throw an exception. Should we need it to return 43 as many times as it's called, that's easy too. We have the full power and flexibility of Kotlin to build any sequence we want, like this:
+**Note** our `cannedAnswers` function is not exactly equivalent to `every { ret.answer(any()) } returns 42 andThen 43`. In fact, the mocked function will return 42 once, and then 43 as many times as it's called. On the other hand, `cannedAnswers` will return 42 once, 43 once, and then throw an exception. Should we need it to return 43 as many times as it's called, that's easy too. We have the full power and flexibility of Kotlin to build any sequence we want, like this:
 
 ```kotlin
 sequence {
@@ -137,3 +137,7 @@ val myService = MyService(hasAnswer = { question ->
 ```
 
 While we do have to write some code, the code we need to write is very easy. And writing a little bit of our own code buys us a lot: we can use the full power of Kotlin and Kotest to verify that `callLog` contains expected elements. We are no longer limited to the options exposed by mocking library. 
+
+### Using Dependency Inversion To Avoid Mocking Static Functions
+
+
