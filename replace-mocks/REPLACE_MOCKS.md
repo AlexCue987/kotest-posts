@@ -96,7 +96,7 @@ sequence {
   while(true) {
     yield(43)
   }
-}
+}.toFunction()
 ```
 
 Should we need our test double to intermittently throw an `Exception`, Kotest 6.0 has another useful extension function to accomplish that, `Sequence<Result<T>>.toFunction()`. The following example shows how it works:
@@ -112,8 +112,28 @@ shouldThrow<RuntimeException> { cannedValues.next() }
 cannedValues.next() shouldBe "no"
 ```
 
-This implemnentation of `cannedValues` can be plugged in exactly like the previos one:
+This implementation of `cannedValues` can be plugged in exactly like the previos one:
 
 ```kotlin
 val myService = MyService(hasAnswer = { cannedAnswers.next() })
 ```
+
+### How to Verify If Calls Were Made With Correct Parameters
+
+If we need to verify that a function was called, and we are not using mocks, the verification is entirely on us - there are no useful helper functions that do it for us. However the task is very easy, like this:
+
+```kotlin
+val cannedAnswers = sequenceOf(43, 43).toFunction()
+val callLog = mutableListOf<String>()
+
+val myService = MyService(hasAnswer = { question ->
+     callLog.add(question)
+     cannedAnswers.next() '
+}
+)
+
+// tests to follow
+// Inspect callLog to verify if the dependency was invoked
+```
+
+While we do have to write some code, the code we need to write is very easy. And writing a little bit of our own code buys us a lot: we can use the full power of Kotlin and Kotest to verify that `callLog` contains expected elements. We are no longer limited to the options exposed by mocking library. 
