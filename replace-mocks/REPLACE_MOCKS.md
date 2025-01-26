@@ -42,7 +42,7 @@ Personally, I like using `mockk` library a lot. It is easy to learn, easy to use
 
 #### When Test Doubles Are Easier To Use Than Mocks
 
-But when I'm using a more functional approach, when my dependencies are functions, and I'm wiring them up myself, I just don't need mocks - test-doubles get the job done with less effort. Let's see how it works.
+But when I'm using a more functional approach, when my dependencies are functions, and I'm wiring them up myself, I just don't need mocks that much - usually test-doubles get the job done with less effort. Let's see how it works.
 <br/>
 <br/>
 Let's refactor the same code from the example above to be more functional, and see for ourselves how mocking becomes unnecessary. Here is the code refactored to be more functional
@@ -70,3 +70,21 @@ val myService = MyService(hasAnswer = { 42 })
 
 // tests to follow
 ```
+
+### Building A Test Doubles To Return A Series Of Canned Values, One at A Time
+
+`mockk` has a really convenient feature, having a mocked function return a series of canned values, one at a time, like this:
+```kotlin
+ every { ret.answer(any()) } returns 42 andThen 43
+```
+
+Let's replicate this really nice feature using extension function `Sequence<T>.toFunction` which is provided by Kotest 6.0:
+
+```kotlin
+val cannedAnswers = sequenceOf(43, 43).toFunction()
+
+val myService = MyService(hasAnswer = { cannedAnswers.next() })
+
+// tests to follow
+```
+
