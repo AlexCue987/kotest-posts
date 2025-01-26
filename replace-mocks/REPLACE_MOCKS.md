@@ -36,9 +36,31 @@ val myService = MyService(mockAnsweringService)
 Personally, I like using `mockk` library a lot. It is easy to learn, easy to use, and it gets the job done for me. When I'm building systems with SpringBoot, I'm using `mockk` day in and day out.
 <br/>
 <br/>
-But when I'm using a more functional approach and wiring up my dependencies myself, let's refactor the same code to be more functional, and mocking becomes unnecessary.
+But when I'm using a more functional approach and wiring up my dependencies myself, I just don't need mocks - when my dependencies are functions, test-double functions get the job done with less effort.
+<br/>
+<br/>
+Let's refactor the same code from the example above to be more functional, and see for ourselves how mocking becomes unnecessary. Here is the code refactored to be more functional
 
-Personally, while my previous project was Kotlin and SpringBoot, my current gig is completely framework-free. So I'm wiring up my dependencies myself, and know what? Even though the code is covered with tests really well, I have never felt the need to use mocks - when my dependencies are functions, test-double functions get the job done with less effort.
+```kotlin
+fun interface HasAnswer {
+   fun answer(question: String): Int
+}
+
+class AnsweringService: HasAnswer {
+   override fun answer(question: String): Int { TODO() }
+}
+
+
+class DecisionEngine(private val hasAnswer: HasAnswer) {
+   fun answer(question: String): Int = hasAnswer.answer(question)
+}
+```
 <br/>
 <br/>
- 
+ And instead of standing up a mock, we can use a very simple test double, like this, which is so very much easier:
+
+```kotlin
+val myService = MyService(hasAnswer = { 42 })
+
+// tests to follow
+```
