@@ -39,6 +39,9 @@ val myService = MyService(mockAnsweringService)
 Personally, I like using `mockk` library a lot. It is easy to learn, easy to use, and it gets the job done for me. It solves some very difficult problems for me, and it's an amzing feat of engineering. And of course whenever I'm building systems with SpringBoot, I'm using `mockk` day in and day out.
 <br/>
 <br/>
+
+#### When Test Doubles Are Easier To Use Than Mocks
+
 But when I'm using a more functional approach, when my dependencies are functions, and I'm wiring them up myself, I just don't need mocks - test-doubles get the job done with less effort. Let's see how it works.
 <br/>
 <br/>
