@@ -19,7 +19,7 @@ class DecisionEngine(private val answeringService: AnsweringService) {
 }
 ```
 
-Naturally, when we unit test `DecisionEngine`, we should mock its dependency, `answeringService`, as follows:
+Naturally, when we unit test `DecisionEngine`, we should mock its dependency, an instance of `AnsweringService`, as follows:
 
 ```kotlin
 val mockAnsweringService = run {
@@ -29,9 +29,15 @@ val mockAnsweringService = run {
 }
 
 val myService = MyService(mockAnsweringService)
+
+// tests to follow
 ```
 
-Personally,
+Personally, I like using `mockk` library a lot. It is easy to learn, easy to use, and it gets the job done for me. When I'm building systems with SpringBoot, I'm using `mockk` day in and day out.
+<br/>
+<br/>
+But when I'm using a more functional approach and wiring up my dependencies myself, let's refactor the same code to be more functional, and mocking becomes unnecessary.
+
 Personally, while my previous project was Kotlin and SpringBoot, my current gig is completely framework-free. So I'm wiring up my dependencies myself, and know what? Even though the code is covered with tests really well, I have never felt the need to use mocks - when my dependencies are functions, test-double functions get the job done with less effort.
 <br/>
 <br/>
