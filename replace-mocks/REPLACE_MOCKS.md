@@ -5,6 +5,9 @@
 Generally, when we do functional programming, and our dependencies are functions, not objects, then when we test our code, we need less mocking, if any at all. And Kotest 6.0 has a couple of nice functions that come in very handy, helping us to build test doubles with less effort.
 <br/>
 <br/>
+
+#### When Mocks Come in Very Handy
+
 Consider, for example, the following object-oriented SpringBoot code:
 
 ```kotlin
